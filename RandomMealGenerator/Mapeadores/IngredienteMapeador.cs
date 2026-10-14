@@ -1,12 +1,13 @@
 ﻿using System.Text.Json;
 using RandomMealGenerator.Dtos;
-using RandomMealGenerator.Models;
+using RandomMealGenerator.Modelos;
 
-namespace RandomMealGenerator.Mappers;
 
-public static class IngredienteMapper
+namespace RandomMealGenerator.Mapeadores;
+
+public static class IngredienteMapeador
 {
-    public static List<Ingrediente> Mapear(MealDto dto)
+    public static List<Ingrediente> Mapear(RefeicaoDto dto)
     {
         var ingredientes = new List<Ingrediente>();
 

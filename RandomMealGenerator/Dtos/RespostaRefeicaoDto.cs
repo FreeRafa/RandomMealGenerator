@@ -2,9 +2,9 @@
 
 namespace RandomMealGenerator.Dtos
 {
-    public class MealResponseDto
+    public class RespostaRefeicaoDto
     {
         [JsonPropertyName("meals")]
-        public List<MealDto>? Meals { get; set; }
+        public List<RefeicaoDto>? Meals { get; set; }
     }
 }

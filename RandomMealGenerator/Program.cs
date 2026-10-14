@@ -1,15 +1,26 @@
-﻿using System.Text.Json;
-using RandomMealGenerator.Dtos;
-using RandomMealGenerator.Mappers;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RandomMealGenerator.Cliente;
+using RandomMealGenerator.Clientes;
+using RandomMealGenerator.Servico;
 
-var urlRefeicaoAleatoria = "https://www.themealdb.com/api/json/v1/1/random.php";
+var servicos = new ServiceCollection();
 
-using var httpClient = new HttpClient();
+// Regista o cliente HTTP tipado. A BaseAddress é a parte comum do URL
+// (o "/" no fim é importante, senão "random.php" é resolvido no sítio errado)
+servicos.AddHttpClient<RefeicaoCliente>(cliente =>
+{
+    cliente.BaseAddress = new Uri("https://www.themealdb.com/api/json/v1/1/");
+});
 
-var json = await httpClient.GetStringAsync(urlRefeicaoAleatoria);
+// O serviço é registado como Transient: cria-se uma instância nova a cada pedido ao contentor
+servicos.AddTransient<RefeicaoServico>();
 
-var resposta = JsonSerializer.Deserialize<MealResponseDto>(json);
-var refeicao = resposta?.Meals?.FirstOrDefault();
+using var provedor = servicos.BuildServiceProvider();
+
+// Pede ao contentor o serviço já montado (com o cliente lá dentro)
+var servico = provedor.GetRequiredService<RefeicaoServico>();
+
+var refeicao = await servico.ObterAleatoriaAsync();
 
 if (refeicao is null)
 {
@@ -19,19 +30,24 @@ if (refeicao is null)
 
 Console.WriteLine($"Nome: {refeicao.Nome}");
 Console.WriteLine($"Categoria: {refeicao.Categoria}");
-Console.WriteLine($"Origem: {refeicao.Area}");
+Console.WriteLine($"Origem: {refeicao.Origem}");
 
 if (!string.IsNullOrWhiteSpace(refeicao.Pais))
     Console.WriteLine($"País: {refeicao.Pais}");
 
-var ingredientes = IngredienteMapper.Mapear(refeicao);
-
+Console.WriteLine();
 Console.WriteLine("Ingredientes:");
-foreach (var ingrediente in ingredientes)
+foreach (var ingrediente in refeicao.Ingredientes)
 {
-    Console.WriteLine($"- {ingrediente.Quantidade} {ingrediente.Nome}");
+    Console.WriteLine($"- {ingrediente.Quantidade} {ingrediente.Nome}".Replace("-  ", "- "));
 }
 
 Console.WriteLine();
 Console.WriteLine("Instruções:");
 Console.WriteLine(refeicao.Instrucoes);
+
+if (!string.IsNullOrWhiteSpace(refeicao.VideoUrl))
+{
+    Console.WriteLine();
+    Console.WriteLine($"Vídeo: {refeicao.VideoUrl}");
+}

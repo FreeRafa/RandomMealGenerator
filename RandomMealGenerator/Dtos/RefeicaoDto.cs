@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace RandomMealGenerator.Dtos;
 
-public class MealDto
+public class RefeicaoDto
 {
     [JsonPropertyName("idMeal")]
     public string? IdExterno { get; set; }

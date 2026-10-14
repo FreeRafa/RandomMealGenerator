@@ -1,4 +1,4 @@
-﻿namespace RandomMealGenerator.Models
+﻿namespace RandomMealGenerator.Modelos
 {
     public class Ingrediente
     {
