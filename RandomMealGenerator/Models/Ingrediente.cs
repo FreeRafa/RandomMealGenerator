@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RandomMealGenerator.Models
+﻿namespace RandomMealGenerator.Models
 {
     public class Ingrediente
     {

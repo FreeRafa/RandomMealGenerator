@@ -19,7 +19,10 @@ if (refeicao is null)
 
 Console.WriteLine($"Nome: {refeicao.Nome}");
 Console.WriteLine($"Categoria: {refeicao.Categoria}");
-Console.WriteLine($"Origem: {refeicao.Area ?? refeicao.Pais}");
+Console.WriteLine($"Origem: {refeicao.Area}");
+
+if (!string.IsNullOrWhiteSpace(refeicao.Pais))
+    Console.WriteLine($"País: {refeicao.Pais}");
 
 var ingredientes = IngredienteMapper.Mapear(refeicao);
 
