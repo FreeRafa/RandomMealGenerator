@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using RandomMealGenerator.Dtos;
 
-namespace RandomMealGenerator.Clientes;
+namespace RandomMealGenerator.Cliente;
 
 public class RefeicaoCliente
 {
